@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Descuentos y Promociones - CBTIS No. 131</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo-section">
+                <div class="logo" id="logo"></div>
+                <div class="logo-text">
+                    <h1>CBTIS No. 131</h1>
+                    <p>Portal Estudiantil</p>
+                </div>
+            </div>
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="servicios.html">Servicios</a></li>
+                    <li><a href="productos.html">Productos</a></li>
+                    <li><a href="descuentos.html">Descuentos</a></li>
+                    <li><a href="index.html#contacto">Contacto</a></li>
+                </ul>
+                <button class="menu-toggle" id="menuToggle">
+                    <span></span><span></span><span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <div class="page-header promo-header">
+        <div class="container">
+            <h1>🎉 Descuentos y Promociones</h1>
+            <p>Aprovecha nuestras ofertas especiales en servicios escolares</p>
+        </div>
+    </div>
+
+    <!-- Promociones Activas -->
+    <section class="promos-section">
+        <div class="container">
+            <h2 class="section-title">Promociones Activas</h2>
+            
+            <div class="promo-highlight">
+                <div class="promo-banner">
+                    <div class="promo-badge">¡OFERTA ESPECIAL!</div>
+                    <h3>Paquete de Inicio de Semestre</h3>
+                    <p class="promo-description">Aprovecha el paquete completo con descuento especial</p>
+                    <div class="promo-details">
+                        <div class="promo-price">
+                            <span class="old-price">$2,000.00</span>
+                            <span class="new-price">$1,500.00</span>
+                            <span class="discount-badge">25% OFF</span>
+                        </div>
+                        <ul class="promo-includes">
+                            <li>✓ Inscripción o Reinscripción</li>
+                            <li>✓ Credencial Escolar</li>
+                            <li>✓ Constancia de Estudios</li>
+                            <li>✓ Seguro Escolar</li>
+                        </ul>
+                    </div>
+                    <button class="btn btn-primary btn-large" onclick="aplicarPromocion('paquete-inicio')">Aplicar Promoción</button>
+                    <p class="promo-validity">Válido hasta: 28 de Febrero 2025</p>
+                </div>
+            </div>
+
+            <div class="promos-grid">
+                <!-- Promo 1 -->
+                <div class="promo-card">
+                    <div class="promo-card-badge">-20%</div>
+                    <div class="promo-icon">🎓</div>
+                    <h3>Certificado + Historial</h3>
+                    <p>Solicita ambos documentos y ahorra</p>
+                    <div class="promo-pricing">
+                        <span class="promo-old-price">$550.00</span>
+                        <span class="promo-new-price">$440.00</span>
+                    </div>
+                    <ul class="promo-features">
+                        <li>Certificado oficial</li>
+                        <li>Historial académico</li>
+                        <li>Entrega en 5 días</li>
+                    </ul>
+                    <button class="btn btn-secondary btn-block" onclick="aplicarPromocion('cert-historial')">Solicitar</button>
+                    <p class="promo-expiry">Válido todo el año</p>
+                </div>
+
+                <!-- Promo 2 -->
+                <div class="promo-card">
+                    <div class="promo-card-badge">-15%</div>
+                    <div class="promo-icon">📄</div>
+                    <h3>3 Constancias</h3>
+                    <p>Compra 3 constancias y paga menos</p>
+                    <div class="promo-pricing">
+                        <span class="promo-old-price">$450.00</span>
+                        <span class="promo-new-price">$382.50</span>
+                    </div>
+                    <ul class="promo-features">
+                        <li>3 constancias a elegir</li>
+                        <li>Generación instantánea</li>
+                        <li>Válidas 6 meses</li>
+                    </ul>
+                    <button class="btn btn-secondary btn-block" onclick="aplicarPromocion('3-constancias')">Solicitar</button>
+                    <p class="promo-expiry">Oferta permanente</p>
+                </div>
+
+                <!-- Promo 3 -->
+                <div class="promo-card featured">
+                    <div class="promo-card-badge">-30%</div>
+                    <div class="promo-icon">💳</div>
+                    <h3>Pago Anticipado</h3>
+                    <p>Paga tu semestre completo por adelantado</p>
+                    <div class="promo-pricing">
+                        <span class="promo-old-price">$1,600.00</span>
+                        <span class="promo-new-price">$1,120.00</span>
+                    </div>
+                    <ul class="promo-features">
+                        <li>Reinscripción incluida</li>
+                        <li>Sin pagos mensuales</li>
+                        <li>Ahorro garantizado</li>
+                    </ul>
+                    <button class="btn btn-primary btn-block" onclick="aplicarPromocion('pago-anticipado')">Pagar Ahora</button>
+                    <p class="promo-expiry">Disponible en agosto y febrero</p>
+                </div>
+
+                <!-- Promo 4 -->
+                <div class="promo-card">
+                    <div class="promo-card-badge">GRATIS</div>
+                    <div class="promo-icon">🏅</div>
+                    <h3>Excelencia Académica</h3>
+                    <p>Promedio mayor a 9.0</p>
+                    <div class="promo-pricing">
+                        <span class="promo-new-price">$0.00</span>
+                    </div>
+                    <ul class="promo-features">
+                        <li>Constancia gratuita</li>
+                        <li>Reconocimiento oficial</li>
+                        <li>Válido cada semestre</li>
+                    </ul>
+                    <button class="btn btn-secondary btn-block" onclick="aplicarPromocion('excelencia')">Verificar Promedio</button>
+                    <p class="promo-expiry">Automático con promedio 9.0+</p>
+                </div>
+
+                <!-- Promo 5 -->
+                <div class="promo-card">
+                    <div class="promo-card-badge">-10%</div>
+                    <div class="promo-icon">👥</div>
+                    <h3>Referido Amigo</h3>
+                    <p>Trae un amigo y ambos ahorran</p>
+                    <div class="promo-pricing">
+                        <span class="promo-new-price">10% DESC</span>
+                    </div>
+                    <ul class="promo-features">
+                        <li>Descuento para ambos</li>
+                        <li>Aplicable a cualquier servicio</li>
+                        <li>Sin límite de referidos</li>
+                    </ul>
+                    <button class="btn btn-secondary btn-block" onclick="aplicarPromocion('referido')">Referir Ahora</button>
+                    <p class="promo-expiry">Programa permanente</p>
+                </div>
+
+                <!-- Promo 6 -->
+                <div class="promo-card">
+                    <div class="promo-card-badge">2x1</div>
+                    <div class="promo-icon">🎫</div>
+                    <h3>Credencial + Foto</h3>
+                    <p>Credencial nueva con sesión fotográfica</p>
+                    <div class="promo-pricing">
+                        <span class="promo-old-price">$150.00</span>
+                        <span class="promo-new-price">$80.00</span>
+                    </div>
+                    <ul class="promo-features">
+                        <li>Credencial nueva</li>
+                        <li>Foto profesional incluida</li>
+                        <li>Entrega en 2 días</li>
+                    </ul>
+                    <button class="btn btn-secondary btn-block" onclick="aplicarPromocion('credencial-foto')">Solicitar</button>
+                    <p class="promo-expiry">Válido hasta marzo 2025</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Descuentos por Categoría -->
+    <section class="discount-categories">
+        <div class="container">
+            <h2 class="section-title">Descuentos Especiales</h2>
+            <div class="categories-grid">
+                <div class="category-card">
+                    <div class="category-icon">🎓</div>
+                    <h3>Estudiantes de Honor</h3>
+                    <p>Promedio 9.5 o superior</p>
+                    <div class="category-discount">50% OFF</div>
+                    <p class="category-applies">En todos los servicios</p>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">👨‍👩‍👧‍👦</div>
+                    <h3>Familias Numerosas</h3>
+                    <p>3 o más hermanos inscritos</p>
+                    <div class="category-discount">20% OFF</div>
+                    <p class="category-applies">En inscripciones</p>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">💼</div>
+                    <h3>Egresados</h3>
+                    <p>Ex-alumnos del CBTIS 131</p>
+                    <div class="category-discount">15% OFF</div>
+                    <p class="category-applies">En certificados</p>
+                </div>
+
+                <div class="category-card">
+                    <div class="category-icon">⚡</div>
+                    <h3>Pago Temprano</h3>
+                    <p>Paga en los primeros 10 días</p>
+                    <div class="category-discount">10% OFF</div>
+                    <p class="category-applies">En reinscripciones</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cupones -->
+    <section class="coupons-section">
+        <div class="container">
+            <h2 class="section-title">Cupones Disponibles</h2>
+            <div class="coupons-grid">
+                <div class="coupon-card">
+                    <div class="coupon-header">
+                        <h3>BIENVENIDA2025</h3>
+                        <span class="coupon-discount">15% OFF</span>
+                    </div>
+                    <p>Válido para nuevos estudiantes en su primera inscripción</p>
+                    <button class="btn btn-secondary btn-sm" onclick="copiarCupon('BIENVENIDA2025')">Copiar Código</button>
+                    <p class="coupon-expiry">Expira: 31/03/2025</p>
+                </div>
+
+                <div class="coupon-card">
+                    <div class="coupon-header">
+                        <h3>VERANO2025</h3>
+                        <span class="coupon-discount">20% OFF</span>
+                    </div>
+                    <p>Descuento en cursos de verano y regularización</p>
+                    <button class="btn btn-secondary btn-sm" onclick="copiarCupon('VERANO2025')">Copiar Código</button>
+                    <p class="coupon-expiry">Expira: 30/06/2025</p>
+                </div>
+
+                <div class="coupon-card">
+                    <div class="coupon-header">
+                        <h3>PRONTO2025</h3>
+                        <span class="coupon-discount">$100 OFF</span>
+                    </div>
+                    <p>Descuento en pagos realizados antes del día 5 de cada mes</p>
+                    <button class="btn btn-secondary btn-sm" onclick="copiarCupon('PRONTO2025')">Copiar Código</button>
+                    <p class="coupon-expiry">Válido todo el año</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Términos y Condiciones -->
+    <section class="terms-section">
+        <div class="container">
+            <div class="terms-box">
+                <h3>Términos y Condiciones de Promociones</h3>
+                <ul class="terms-list">
+                    <li>Las promociones no son acumulables salvo indicación contraria</li>
+                    <li>Los descuentos aplican únicamente en los servicios especificados</li>
+                    <li>Es necesario presentar documentación que acredite el derecho al descuento</li>
+                    <li>Las fechas de vigencia son estrictas y no se harán excepciones</li>
+                    <li>El CBTIS 131 se reserva el derecho de modificar o cancelar promociones</li>
+                    <li>Los cupones son de un solo uso por estudiante</li>
+                    <li>Para más información, contacta al departamento de servicios escolares</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3>CBTIS No. 131</h3>
+                <p>Centro de Bachillerato Tecnológico Industrial y de Servicios</p>
+            </div>
+            <div class="footer-section">
+                <h3>Enlaces Rápidos</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="servicios.html">Servicios</a></li>
+                    <li><a href="productos.html">Productos</a></li>
+                    <li><a href="descuentos.html">Descuentos</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <ul class="footer-links">
+                    <li>📧 contacto@cbtis131.edu.mx</li>
+                    <li>📞 (444) 123-4567</li>
+                    <li>📍 San Luis Potosí, SLP</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 CBTIS No. 131. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
