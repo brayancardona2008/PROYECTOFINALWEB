@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta name="description" content="Portal Estudiantil CBTIS No. 131 - Consulta de calificaciones, certificados y trámites en línea"/>
+    <meta name="keywords" content="CBTIS 131, boleta, calificaciones, certificados, constancias, pagos"/>
+    <title>Portal Estudiantil - CBTIS No. 131</title>
+    <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo-section">
+                <div class="logo" id="logo" aria-hidden="true">
+                    <!-- SVG generado por JS (insertado en DOM) -->
+                </div>
+                <div class="logo-text">
+                    <h1>CBTIS No. 131</h1>
+                    <p>Portal Estudiantil</p>
+                </div>
+            </div>
+
+            <nav class="nav">
+                <ul class="nav-list">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="servicios.html">Servicios</a></li>
+                    <li><a href="productos.html">Productos</a></li>
+                    <li><a href="descuentos.html">Descuentos</a></li>
+                    <li><a href="#contacto">Contacto</a></li>
+                </ul>
+
+                <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+                    <span></span><span></span><span></span>
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero -->
+    <section class="hero" id="inicio">
+        <div class="container hero-content">
+            <h2>Bienvenido al Portal Estudiantil</h2>
+            <p>Accede a todos tus servicios académicos en un solo lugar</p>
+            <div class="hero-buttons">
+                <a href="servicios.html" class="btn btn-primary">Explorar Servicios</a>
+                <a href="#login" class="btn btn-secondary">Iniciar Sesión</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Alert Banner -->
+    <div class="alert-banner" id="alertBanner" role="status" aria-live="polite">
+        <div class="container alert-inner">
+            <p><strong>⚠️ Periodo de Pagos Activo:</strong> Consulta tu referencia de pago de Banco Santander disponible durante agosto y febrero.</p>
+            <button class="alert-close" id="alertClose" aria-label="Cerrar alerta">&times;</button>
+        </div>
+    </div>
+
+    <!-- Login Section -->
+    <section class="login-section" id="login">
+        <div class="container">
+            <div class="login-container">
+                <div class="login-header">
+                    <div class="login-logo" id="loginLogo"></div>
+                    <h2>Iniciar Sesión</h2>
+                    <p>Ingresa tus credenciales para acceder al portal</p>
+                </div>
+                
+                <form class="login-form" id="loginForm">
+                    <div class="form-group">
+                        <label for="curp">CURP</label>
+                        <input type="text" id="curp" name="curp" required 
+                               placeholder="Ej: ABCD123456HMCXYZ00"
+                               pattern="[A-Z]{4}[0-9]{6}[HM][A-Z]{5}[0-9]{2}"
+                               maxlength="18">
+                        <small>18 caracteres (4 letras, 6 números, H/M, 5 letras, 2 números)</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="numeroControl">Número de Control</label>
+                        <input type="text" id="numeroControl" name="numeroControl" required 
+                               placeholder="Ej: 20240001"
+                               pattern="[0-9]{8}"
+                               maxlength="8">
+                        <small>8 dígitos numéricos</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Contraseña</label>
+                        <input type="password" id="password" name="password" required 
+                               placeholder="Ingresa tu contraseña"
+                               minlength="6">
+                        <small>Mínimo 6 caracteres</small>
+                    </div>
+
+                    <div class="form-group checkbox-group">
+                        <input type="checkbox" id="remember" name="remember">
+                        <label for="remember">Recordar mis datos</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
+                    
+                    <div class="login-links">
+                        <a href="#">¿Olvidaste tu contraseña?</a>
+                        <a href="#">Registrarse</a>
+                    </div>
+                </form>
+
+                <div class="login-info">
+                    <p><strong>Nota:</strong> Si es tu primer acceso, tu contraseña es tu fecha de nacimiento (DDMMAAAA)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Servicios Preview -->
+    <section class="services" id="servicios-preview">
+        <div class="container">
+            <h2 class="section-title">Nuestros Servicios</h2>
+            <p class="section-subtitle">Accede rápidamente a los trámites y consultas más importantes</p>
+
+            <div class="services-grid">
+                <article class="service-card">
+                    <div class="service-icon">📊</div>
+                    <h3>Boleta de Calificaciones</h3>
+                    <p>Consulta tus calificaciones del semestre actual y anteriores de forma rápida y segura.</p>
+                    <a href="servicios.html#boleta" class="service-link">Consultar ahora →</a>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-icon">🎓</div>
+                    <h3>Certificados de Egresados</h3>
+                    <p>Descarga y solicita tu certificado de estudios como egresado del CBTIS 131.</p>
+                    <a href="servicios.html#certificado" class="service-link">Solicitar certificado →</a>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-icon">📄</div>
+                    <h3>Constancias de Estudios</h3>
+                    <p>Tramita constancias oficiales con validez institucional de manera digital.</p>
+                    <a href="servicios.html#constancia" class="service-link">Tramitar constancia →</a>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-icon">📚</div>
+                    <h3>Historial Académico</h3>
+                    <p>Revisa tu trayectoria académica completa con todas tus calificaciones.</p>
+                    <a href="servicios.html#historial" class="service-link">Ver historial →</a>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-icon">💳</div>
+                    <h3>Referencia de Pago Santander</h3>
+                    <p>Consulta tu referencia de pago temporal (disponible en agosto y febrero).</p>
+                    <a href="servicios.html#referencia" class="service-link">Consultar referencia →</a>
+                </article>
+
+                <article class="service-card">
+                    <div class="service-icon">🏪</div>
+                    <h3>Pagos en Línea</h3>
+                    <p>Realiza pagos con tarjeta, transferencia o en tiendas OXXO de forma segura.</p>
+                    <a href="servicios.html#pago" class="service-link">Realizar pago →</a>
+                </article>
+            </div>
+        </div>
+    </section>
+
+    <!-- Métodos de pago -->
+    <section class="payment-methods" id="pagos">
+        <div class="container">
+            <h2 class="section-title">Métodos de Pago Disponibles</h2>
+            <p class="section-subtitle">Elige la forma de pago que más te convenga</p>
+
+            <div class="payment-grid">
+                <div class="payment-card">
+                    <div class="payment-icon">💳</div>
+                    <h3>Tarjeta de Crédito/Débito</h3>
+                    <ul class="payment-list">
+                        <li>Visa</li>
+                        <li>Mastercard</li>
+                        <li>American Express</li>
+                        <li>Pago inmediato y seguro</li>
+                    </ul>
+                </div>
+
+                <div class="payment-card">
+                    <div class="payment-icon">🏦</div>
+                    <h3>Transferencia Bancaria</h3>
+                    <ul class="payment-list">
+                        <li>SPEI</li>
+                        <li>Transferencia interbancaria</li>
+                        <li>Banco Santander</li>
+                        <li>Confirmación en 24 hrs</li>
+                    </ul>
+                </div>
+
+                <div class="payment-card">
+                    <div class="payment-icon">🏪</div>
+                    <h3>Pago en OXXO</h3>
+                    <ul class="payment-list">
+                        <li>Genera tu ficha de pago</li>
+                        <li>Paga en cualquier OXXO</li>
+                        <li>Sin comisiones extra</li>
+                        <li>Confirmación automática</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Información importante -->
+    <section class="info-section">
+        <div class="container">
+            <h2 class="section-title">Información Importante</h2>
+            <div class="info-content">
+                <div class="info-box">
+                    <h3>Periodos de Pago Santander</h3>
+                    <ol class="info-list">
+                        <li><strong>Agosto:</strong> Inicio del semestre agosto-diciembre</li>
+                        <li><strong>Febrero:</strong> Inicio del semestre febrero-junio</li>
+                        <li>La referencia de pago es temporal y solo está disponible durante estos meses</li>
+                        <li>Conserva tu comprobante de pago para cualquier aclaración</li>
+                    </ol>
+                </div>
+
+                <div class="info-box">
+                    <h3>Requisitos para Trámites</h3>
+                    <ul class="info-list">
+                        <li>Matrícula vigente</li>
+                        <li>CURP actualizada</li>
+                        <li>Correo electrónico institucional</li>
+                        <li>Comprobante de pago (cuando aplique)</li>
+                        <li>Identificación oficial (para certificados)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contacto">
+        <div class="container footer-content">
+            <div class="footer-section">
+                <h3>CBTIS No. 131</h3>
+                <p>Centro de Bachillerato Tecnológico Industrial y de Servicios</p>
+                <p>Formando profesionales técnicos de excelencia</p>
+            </div>
+
+            <div class="footer-section">
+                <h3>Enlaces Rápidos</h3>
+                <ul class="footer-links">
+                    <li><a href="index.html">Inicio</a></li>
+                    <li><a href="servicios.html">Servicios</a></li>
+                    <li><a href="productos.html">Productos</a></li>
+                    <li><a href="descuentos.html">Descuentos</a></li>
+                    <li><a href="#">Aviso de Privacidad</a></li>
+                </ul>
+            </div>
+
+            <div class="footer-section">
+                <h3>Contacto</h3>
+                <ul class="footer-links">
+                    <li>📧 contacto@cbtis131.edu.mx</li>
+                    <li>📞 (444) 123-4567</li>
+                    <li>📍 San Luis Potosí, SLP</li>
+                    <li>🕐 Lun - Vie: 8:00 AM - 6:00 PM</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 CBTIS No. 131. Todos los derechos reservados.
+         </p>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; DERECHOS RESERVADOS DEL PROYECTO DE LA ASIGNATURA DE: CONSTRUYE APLICACIONES WEB.
+                 DESARROLLADO POR: CARDONA MARTINEZ BRAYAN LEOPOLDO - TORRES HERNANDEZ FRIDA CELESTE 5F
+                 PROYECTO LLEVADO BAJO LA ASESORIA DE LA DOCENTE: HERNANDEZ MARTINEZ IMELDA DEYANIRA
+        </p>
+    </div>
+
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html> 
+<script>
+  window.addEventListener('mouseover', initLandbot, { once: true });
+  window.addEventListener('touchstart', initLandbot, { once: true });
+  var myLandbot;
+  function initLandbot() {
+    if (!myLandbot) {
+      var s = document.createElement('script');
+      s.type = "module"
+      s.async = true;
+      s.addEventListener('load', function() {
+        var myLandbot = new Landbot.Livechat({
+          configUrl: 'https://storage.googleapis.com/landbot.online/v3/H-3232054-MNRNX267NEJNX4Q3/index.json',
+        });
+      });
+      s.src = 'https://cdn.landbot.io/landbot-3/landbot-3.0.0.mjs';
+      var x = document.getElementsByTagName('script')[0];
+      x.parentNode.insertBefore(s, x);
+    }
+  }
+</script>

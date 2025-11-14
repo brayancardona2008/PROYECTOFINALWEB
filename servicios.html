@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Servicios - CBTIS No. 131</title>
+  <link rel="stylesheet" href="estilos.css">
+  <style>
+    /* Pequeñas reglas específicas para resultados/boletas */
+    .result-container { display: none; background:#fff; padding:18px; border-radius:10px; box-shadow:0 6px 20px rgba(0,0,0,0.08); margin-top:12px;}
+    .result-container.active { display:block; }
+    .grades-table, .doc-table { width:100%; border-collapse:collapse; margin-top:12px; }
+    .grades-table th, .grades-table td, .doc-table th, .doc-table td { border:1px solid #e6e6e6; padding:8px; text-align:center; }
+    .doc-header { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-bottom:12px; }
+    .doc-header .left { font-weight:700; color:var(--primary,#0d47a1); }
+    .badge { background:var(--secondary,#f39c12); color:#111; padding:6px 10px; border-radius:6px; font-weight:700; }
+    .student-info p { margin:6px 0; }
+    .result-actions { margin-top:12px; display:flex; gap:8px; flex-wrap:wrap; }
+    @media print {
+      nav, .menu-toggle, .btn-outline, .btn-primary, .btn-secondary { display:none !important; }
+      body { background:#fff; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container header-content">
+      <div class="logo-section">
+        <div class="logo" id="logo" aria-hidden="true"></div>
+        <div class="logo-text">
+          <h1>CBTIS No. 131</h1>
+          <p>Portal Estudiantil</p>
+        </div>
+      </div>
+
+      <nav class="nav">
+        <ul class="nav-list">
+          <li><a href="index.html">Inicio</a></li>
+          <li><a href="servicios.html">Servicios</a></li>
+          <li><a href="productos.html">Productos</a></li>
+          <li><a href="descuentos.html">Descuentos</a></li>
+          <li><a href="index.html#contacto">Contacto</a></li>
+        </ul>
+        <button class="menu-toggle" id="menuToggle" aria-label="Abrir menú">
+          <span></span><span></span><span></span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="page-header" style="margin:18px 0;">
+      <h1>Servicios Escolares</h1>
+      <p>Completa el formulario del servicio deseado para generar el documento de ejemplo.</p>
+    </div>
+
+    <!-- === BOLETA === -->
+    <section class="service-section" id="boleta">
+      <div class="service-detail-card">
+        <div class="service-detail-header">
+          <div class="service-icon">📊</div>
+          <h2>Boleta de Calificaciones</h2>
+        </div>
+
+        <form class="service-form" id="boletaForm">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="boletaCurp">CURP *</label>
+              <input type="text" id="boletaCurp" required maxlength="18" placeholder="ABCD123456HMCXYZ00">
+            </div>
+            <div class="form-group">
+              <label for="boletaControl">Número de Control *</label>
+              <input type="text" id="boletaControl" required maxlength="12" placeholder="20240001">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="boletaNombre">Nombre completo *</label>
+              <input type="text" id="boletaNombreInput" required placeholder="Ej. Brayan Cardona Martínez">
+            </div>
+            <div class="form-group">
+              <label for="boletaSemestre">Semestre *</label>
+              <select id="boletaSemestre" required>
+                <option value="">Selecciona...</option>
+                <option value="1">1°</option><option value="2">2°</option><option value="3">3°</option>
+                <option value="4">4°</option><option value="5">5°</option><option value="6">6°</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="boletaGrupo">Grupo *</label>
+              <input type="text" id="boletaGrupo" required placeholder="5B">
+            </div>
+            <div class="form-group">
+              <label for="boletaTurno">Turno *</label>
+              <select id="boletaTurno" required>
+                <option value="">Selecciona...</option>
+                <option>Matutino</option><option>Vespertino</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Consultar Boleta</button>
+        </form>
+
+        <div id="boletaResult" class="result-container" aria-live="polite">
+          <!-- Contenido generado por JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- === CERTIFICADO === -->
+    <section class="service-section" id="certificado">
+      <div class="service-detail-card">
+        <div class="service-detail-header">
+          <div class="service-icon">🎓</div>
+          <h2>Certificado de Estudios</h2>
+        </div>
+
+        <form id="certificadoForm" class="service-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="certCurp">CURP *</label>
+              <input type="text" id="certCurp" required maxlength="18">
+            </div>
+            <div class="form-group">
+              <label for="certControl">Número de control *</label>
+              <input type="text" id="certControl" required maxlength="12">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="certGeneracion">Generación *</label>
+              <input type="text" id="certGeneracion" placeholder="2021-2024" required>
+            </div>
+            <div class="form-group">
+              <label for="certEspecialidad">Especialidad *</label>
+              <select id="certEspecialidad" required>
+                <option value="">Selecciona...</option>
+                <option value="programacion">Programación</option>
+                <option value="electronica">Electrónica</option>
+                <option value="contabilidad">Contabilidad</option>
+                <option value="administracion">Administración</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="certMotivo">Motivo de solicitud *</label>
+            <textarea id="certMotivo" required rows="3" placeholder="Describe el motivo..."></textarea>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Solicitar Certificado</button>
+        </form>
+
+        <div id="certificadoResult" class="result-container"></div>
+      </div>
+    </section>
+
+    <!-- === CONSTANCIA === -->
+    <section class="service-section" id="constancia">
+      <div class="service-detail-card">
+        <div class="service-detail-header">
+          <div class="service-icon">📄</div>
+          <h2>Constancia de Estudios</h2>
+        </div>
+
+        <form id="constanciaForm" class="service-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="constCurp">CURP *</label>
+              <input type="text" id="constCurp" required maxlength="18">
+            </div>
+            <div class="form-group">
+              <label for="constControl">Número de control *</label>
+              <input type="text" id="constControl" required maxlength="12">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="constNombre">Nombre completo *</label>
+              <input type="text" id="constNombreInput" required>
+            </div>
+            <div class="form-group">
+              <label for="constSemestre">Semestre actual *</label>
+              <select id="constSemestre" required>
+                <option value="">Selecciona...</option>
+                <option value="1">1°</option><option value="2">2°</option><option value="3">3°</option>
+                <option value="4">4°</option><option value="5">5°</option><option value="6">6°</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="constTipo">Tipo de constancia *</label>
+              <select id="constTipo" required>
+                <option value="">Selecciona...</option>
+                <option value="estudios">Constancia de Estudios</option>
+                <option value="conducta">Constancia de Buena Conducta</option>
+                <option value="inscripcion">Constancia de Inscripción</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="constTiempo">Tiempo de entrega</label>
+              <select id="constTiempo">
+                <option value="inmediato">Inmediato</option>
+                <option value="24">24 hrs</option>
+                <option value="48">48 hrs</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Generar Constancia</button>
+        </form>
+
+        <div id="constanciaResult" class="result-container"></div>
+      </div>
+    </section>
+
+    <!-- === HISTORIAL === -->
+    <section class="service-section" id="historial">
+      <div class="service-detail-card">
+        <div class="service-detail-header">
+          <div class="service-icon">📚</div>
+          <h2>Historial Académico</h2>
+        </div>
+
+        <form id="historialForm" class="service-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="histCurp">CURP *</label>
+              <input type="text" id="histCurp" required maxlength="18">
+            </div>
+            <div class="form-group">
+              <label for="histControl">Número de control *</label>
+              <input type="text" id="histControl" required maxlength="12">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Consultar Historial</button>
+        </form>
+
+        <div id="historialResult" class="result-container"></div>
+      </div>
+    </section>
+
+    <!-- === REFERENCIA === -->
+    <section class="service-section" id="referencia">
+      <div class="service-detail-card">
+        <div class="service-detail-header">
+          <div class="service-icon">💳</div>
+          <h2>Referencia de Pago Santander</h2>
+        </div>
+
+        <form id="referenciaForm" class="service-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="refCurp">CURP *</label>
+              <input type="text" id="refCurp" required maxlength="18">
+            </div>
+            <div class="form-group">
+              <label for="refControl">Número de control *</label>
+              <input type="text" id="refControl" required maxlength="12">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="refConcepto">Concepto *</label>
+              <select id="refConcepto" required>
+                <option value="">Selecciona...</option>
+                <option value="inscripcion">Inscripción</option>
+                <option value="reinscripcion">Reinscripción</option>
+                <option value="certificado">Certificado</option>
+                <option value="constancia">Constancia</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="refBanco">Banco preferido</label>
+              <select id="refBanco">
+                <option>Santander</option><option>BBVA</option><option>Banorte</option>
+              </select>
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Generar Referencia</button>
+        </form>
+
+        <div id="referenciaResult" class="result-container"></div>
+      </div>
+    </section>
+
+    <!-- === PAGO === -->
+    <section class="service-section" id="pago">
+      <div class="service-detail-card">
+        <div class="service-detail-header">
+          <div class="service-icon">🏪</div>
+          <h2>Pago en Línea</h2>
+        </div>
+
+        <form id="pagoForm" class="service-form">
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pagoCurp">CURP *</label>
+              <input type="text" id="pagoCurp" required maxlength="18">
+            </div>
+            <div class="form-group">
+              <label for="pagoControl">Número de control *</label>
+              <input type="text" id="pagoControl" required maxlength="12">
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pagoConcepto">Concepto *</label>
+              <select id="pagoConcepto" required>
+                <option value="">Selecciona...</option>
+                <option value="inscripcion">Inscripción</option>
+                <option value="reinscripcion">Reinscripción</option>
+                <option value="certificado">Certificado</option>
+                <option value="constancia">Constancia</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="pagoMetodo">Método de pago *</label>
+              <select id="pagoMetodo" required>
+                <option value="">Selecciona...</option>
+                <option value="tarjeta">Tarjeta</option>
+                <option value="transferencia">Transferencia</option>
+                <option value="oxxo">OXXO</option>
+              </select>
+            </div>
+          </div>
+
+          <div id="tarjetaFields" style="display:none;">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="pagoTarjeta">Número de tarjeta</label>
+                <input id="pagoTarjeta" type="text" placeholder="#### #### #### ####">
+              </div>
+              <div class="form-group">
+                <label for="pagoVencimiento">Vencimiento</label>
+                <input id="pagoVencimiento" type="text" placeholder="MM/AA">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label for="pagoCvv">CVV</label>
+                <input id="pagoCvv" type="text" placeholder="###">
+              </div>
+            </div>
+          </div>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label for="pagoMonto">Monto (MXN) *</label>
+              <input type="number" id="pagoMonto" required min="0" step="1">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Realizar Pago (Simulado)</button>
+        </form>
+
+        <div id="pagoResult" class="result-container"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="footer" id="contacto" style="margin-top:18px;">
+    <div class="container footer-content">
+      <div class="footer-section">
+        <h3>CBTIS No. 131</h3>
+        <p>Centro de Bachillerato Tecnológico Industrial y de Servicios</p>
+      </div>
+      <div class="footer-section">
+        <h3>Contacto</h3>
+        <ul class="footer-links">
+          <li>📧 contacto@cbtis131.edu.mx</li>
+          <li>📞 (444) 123-4567</li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 CBTIS No. 131. Todos los derechos reservados.</p>
+    </div>
+  </footer>
+
+  <!-- JS: lógica para generar resultados en página -->
+  <script>
+    /* Generador de logo abeja (inserta SVG en elementos con id="logo") */
+    function generateBeeLogo() {
+      const beeSVG = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+            <circle cx="50" cy="50" r="20" fill="#FFD700"/>
+            <ellipse cx="35" cy="45" rx="8" ry="15" fill="#dff1ff" opacity="0.6"/>
+            <ellipse cx="65" cy="45" rx="8" ry="15" fill="#dff1ff" opacity="0.6"/>
+            <rect x="45" y="45" width="10" height="3" fill="#111"/>
+            <rect x="45" y="52" width="10" height="3" fill="#111"/>
+            <rect x="45" y="59" width="10" height="3" fill="#111"/>
+            <circle cx="45" cy="32" r="2" fill="#111"/>
+            <circle cx="55" cy="32" r="2" fill="#111"/>
+            <path d="M 45 38 Q 50 40 55 38" stroke="#111" fill="none" stroke-width="1.2"/>
+        </svg>
+      `;
+      document.querySelectorAll('#logo').forEach(el => el.innerHTML = beeSVG);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      generateBeeLogo();
+
+      // Manejo pago - mostrar campos de tarjeta si aplica
+      const pagoMetodo = document.getElementById('pagoMetodo');
+      if (pagoMetodo) {
+        pagoMetodo.addEventListener('change', (e) => {
+          const tarjetaFields = document.getElementById('tarjetaFields');
+          if (e.target.value === 'tarjeta') tarjetaFields.style.display = 'block';
+          else tarjetaFields.style.display = 'none';
+        });
+      }
+
+      // Formularios
+      setupBoleta();
+      setupCertificado();
+      setupConstancia();
+      setupHistorial();
+      setupReferencia();
+      setupPago();
+    });
+
+    /* ---------- BOLETA ---------- */
+    function setupBoleta(){
+      const form = document.getElementById('boletaForm');
+      const result = document.getElementById('boletaResult');
+      const materias = ["Matemáticas","Física","Programación","Inglés","Historia","Química"];
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        // Leer campos
+        const curp = document.getElementById('boletaCurp').value.trim();
+        const control = document.getElementById('boletaControl').value.trim();
+        const nombre = document.getElementById('boletaNombreInput').value.trim();
+        const semestre = document.getElementById('boletaSemestre').value;
+        const grupo = document.getElementById('boletaGrupo').value.trim();
+        const turno = document.getElementById('boletaTurno').value;
+
+        // Validar mínimos
+        if (!curp || !control || !nombre || !semestre) {
+          alert('Por favor completa todos los campos de la boleta.');
+          return;
+        }
+
+        // Generar calificaciones aleatorias (70-100)
+        let total = 0;
+        const filas = materias.map(mat => {
+          const cal = Math.floor(Math.random() * 31) + 70;
+          total += cal;
+          const estado = cal >= 70 ? "Aprobado" : "Reprobado";
+          return `<tr><td>${mat}</td><td>${cal}</td><td>${estado}</td></tr>`;
+        }).join('');
+
+        const promedio = (total / materias.length).toFixed(2);
+
+        // Construir HTML resultado
+        result.innerHTML = `
+          <div class="doc-header">
+            <div class="left">Boleta de Calificaciones - CBTIS 131</div>
+            <div class="badge">Semestre ${semestre}</div>
+          </div>
+          <div class="student-info">
+            <p><strong>Nombre:</strong> ${nombre}</p>
+            <p><strong>CURP:</strong> ${curp}</p>
+            <p><strong>No. Control:</strong> ${control}</p>
+            <p><strong>Grupo:</strong> ${grupo} · <strong>Turno:</strong> ${turno}</p>
+          </div>
+          <table class="grades-table">
+            <thead><tr><th>Materia</th><th>Calificación</th><th>Estado</th></tr></thead>
+            <tbody>${filas}</tbody>
+          </table>
+          <h4 style="margin-top:10px;">Promedio general: ${promedio}</h4>
+          <div class="result-actions">
+            <button class="btn btn-secondary" onclick="window.print()">Imprimir / Guardar PDF</button>
+            <button class="btn btn-secondary" onclick="downloadExampleJSON('boleta', ${JSON.stringify({
+              nombre: '${nombre}',
+              curp: '${curp}',
+              control: '${control}',
+              semestre: '${semestre}',
+              grupo: '${grupo}',
+              turno: '${turno}',
+              promedio: '${promedio}'
+            })})">Guardar JSON (ejemplo)</button>
+          </div>
+        `;
+        result.classList.add('active');
+        result.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    /* ---------- CERTIFICADO ---------- */
+    function setupCertificado(){
+      const form = document.getElementById('certificadoForm');
+      const result = document.getElementById('certificadoResult');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const curp = document.getElementById('certCurp').value.trim();
+        const control = document.getElementById('certControl').value.trim();
+        const generacion = document.getElementById('certGeneracion').value.trim();
+        const especialidad = document.getElementById('certEspecialidad').value;
+        const motivo = document.getElementById('certMotivo').value.trim();
+
+        if(!curp||!control||!generacion||!especialidad||!motivo){
+          alert('Completa todos los campos del certificado.');
+          return;
+        }
+
+        const folio = 'CERT-' + Math.random().toString(36).substr(2,9).toUpperCase();
+        const entrega = new Date(); entrega.setDate(entrega.getDate() + 5);
+
+        result.innerHTML = `
+          <div class="doc-header">
+            <div class="left">Solicitud de Certificado</div>
+            <div class="badge">${folio}</div>
+          </div>
+          <div class="student-info">
+            <p><strong>CURP:</strong> ${curp}</p>
+            <p><strong>No. Control:</strong> ${control}</p>
+            <p><strong>Generación:</strong> ${generacion} · <strong>Especialidad:</strong> ${especialidad}</p>
+            <p><strong>Motivo:</strong> ${motivo}</p>
+            <p><strong>Fecha estimada de entrega:</strong> ${entrega.toLocaleDateString()}</p>
+          </div>
+          <div class="result-actions">
+            <button class="btn btn-secondary" onclick="window.print()">Imprimir / Guardar PDF</button>
+          </div>
+        `;
+        result.classList.add('active');
+        result.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    /* ---------- CONSTANCIA ---------- */
+    function setupConstancia(){
+      const form = document.getElementById('constanciaForm');
+      const result = document.getElementById('constanciaResult');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const curp = document.getElementById('constCurp').value.trim();
+        const control = document.getElementById('constControl').value.trim();
+        const nombre = document.getElementById('constNombreInput').value.trim();
+        const semestre = document.getElementById('constSemestre').value;
+        const tipo = document.getElementById('constTipo').value;
+        const tiempo = document.getElementById('constTiempo').value || 'Inmediato';
+
+        if(!curp||!control||!nombre||!semestre||!tipo){
+          alert('Completa todos los campos de la constancia.');
+          return;
+        }
+
+        const folio = 'CONST-' + Math.random().toString(36).substr(2,8).toUpperCase();
+        const fecha = new Date().toLocaleDateString();
+
+        result.innerHTML = `
+          <div class="doc-header">
+            <div class="left">Constancia de Estudios</div>
+            <div class="badge">${tipo.toUpperCase()}</div>
+          </div>
+          <div class="student-info">
+            <p><strong>Nombre:</strong> ${nombre}</p>
+            <p><strong>CURP:</strong> ${curp}</p>
+            <p><strong>No. Control:</strong> ${control}</p>
+            <p><strong>Semestre:</strong> ${semestre}°</p>
+            <p><strong>Fecha:</strong> ${fecha} · <strong>Folio:</strong> ${folio}</p>
+            <p>Tiempo de entrega seleccionado: ${tiempo}</p>
+          </div>
+          <div class="result-actions">
+            <button class="btn btn-secondary" onclick="window.print()">Imprimir / Guardar PDF</button>
+          </div>
+        `;
+        result.classList.add('active');
+        result.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    /* ---------- HISTORIAL ---------- */
+    function setupHistorial(){
+      const form = document.getElementById('historialForm');
+      const result = document.getElementById('historialResult');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const curp = document.getElementById('histCurp').value.trim();
+        const control = document.getElementById('histControl').value.trim();
+        if(!curp || !control){
+          alert('Completa CURP y número de control.');
+          return;
+        }
+
+        // Generar ejemplo de semestres y promedios
+        const semestres = [
+          { num: 1, promedio: (Math.random()*1.5 + 7.5).toFixed(2), materias: ['Matemáticas I','Química I','Inglés I'] },
+          { num: 2, promedio: (Math.random()*1.5 + 7.6).toFixed(2), materias: ['Matemáticas II','Química II','Inglés II'] },
+          { num: 3, promedio: (Math.random()*1.5 + 7.8).toFixed(2), materias: ['Física I','Programación I','Historia'] },
+          { num: 4, promedio: (Math.random()*1.5 + 8.0).toFixed(2), materias: ['Física II','Programación II','Inglés IV'] }
+        ];
+        const promGeneral = (semestres.reduce((s, x) => s + parseFloat(x.promedio),0) / semestres.length).toFixed(2);
+
+        let htmlSem = `<p><strong>CURP:</strong> ${curp} · <strong>No. Control:</strong> ${control}</p>
+                       <p><strong>Promedio general:</strong> ${promGeneral}</p><div style="margin-top:10px;">`;
+        semestres.forEach(s => {
+          htmlSem += `<div style="margin-bottom:10px;"><strong>${s.num}° Semestre - Promedio ${s.promedio}</strong><ul style="text-align:left; margin-left:1rem;">${s.materias.map(m=>`<li>${m}</li>`).join('')}</ul></div>`;
+        });
+        htmlSem += `</div><div class="result-actions"><button class="btn btn-secondary" onclick="window.print()">Imprimir / Guardar PDF</button></div>`;
+
+        result.innerHTML = `<div class="doc-header"><div class="left">Historial Académico - Resumen</div></div>${htmlSem}`;
+        result.classList.add('active');
+        result.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    /* ---------- REFERENCIA ---------- */
+    function setupReferencia(){
+      const form = document.getElementById('referenciaForm');
+      const result = document.getElementById('referenciaResult');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const curp = document.getElementById('refCurp').value.trim();
+        const control = document.getElementById('refControl').value.trim();
+        const concepto = document.getElementById('refConcepto').value;
+        const banco = document.getElementById('refBanco').value || 'Santander';
+        if(!curp||!control||!concepto){ alert('Completa los campos.'); return; }
+
+        const referencia = Math.floor(Math.random()*9000000000000) + 1000000000000;
+        const montos = { inscripcion: '$1,500.00', reinscripcion: '$800.00', certificado: '$350.00', constancia: '$150.00' };
+        const conceptosText = { inscripcion:'Inscripción', reinscripcion:'Reinscripción', certificado:'Certificado', constancia:'Constancia' };
+        const monto = montos[concepto] || '$0.00';
+        const hoy = new Date(); const vig = new Date(); vig.setDate(hoy.getDate()+30);
+
+        result.innerHTML = `
+          <div class="doc-header"><div class="left">Referencia de Pago</div><div class="badge">Ref: ${referencia}</div></div>
+          <div class="student-info">
+            <p><strong>Concepto:</strong> ${conceptosText[concepto]}</p>
+            <p><strong>Monto:</strong> ${monto} · <strong>Banco:</strong> ${banco}</p>
+            <p><strong>Nombre/ID:</strong> ${control} · <strong>CURP:</strong> ${curp}</p>
+            <p><strong>Vigencia hasta:</strong> ${vig.toLocaleDateString()}</p>
+          </div>
+          <div class="result-actions">
+            <button class="btn btn-secondary" onclick="window.print()">Imprimir / Guardar PDF</button>
+          </div>
+        `;
+        result.classList.add('active');
+        result.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    /* ---------- PAGO ---------- */
+    function setupPago(){
+      const form = document.getElementById('pagoForm');
+      const result = document.getElementById('pagoResult');
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const curp = document.getElementById('pagoCurp').value.trim();
+        const control = document.getElementById('pagoControl').value.trim();
+        const concepto = document.getElementById('pagoConcepto').value;
+        const metodo = document.getElementById('pagoMetodo').value;
+        const monto = document.getElementById('pagoMonto').value;
+        if(!curp||!control||!concepto||!metodo||!monto){ alert('Completa todos los campos de pago.'); return; }
+
+        const folio = 'PAG-' + Math.random().toString(36).substr(2,10).toUpperCase();
+        const fecha = new Date().toLocaleString();
+
+        result.innerHTML = `
+          <div class="doc-header"><div class="left">Comprobante de Pago (Simulado)</div><div class="badge">${folio}</div></div>
+          <div class="student-info">
+            <p><strong>CURP:</strong> ${curp} · <strong>No. Control:</strong> ${control}</p>
+            <p><strong>Concepto:</strong> ${concepto} · <strong>Método:</strong> ${metodo}</p>
+            <p><strong>Monto:</strong> $${parseFloat(monto).toFixed(2)} · <strong>Fecha:</strong> ${fecha}</p>
+          </div>
+          <div class="result-actions">
+            <button class="btn btn-secondary" onclick="window.print()">Imprimir / Guardar PDF</button>
+          </div>
+        `;
+        result.classList.add('active');
+        result.scrollIntoView({ behavior: 'smooth' });
+      });
+    }
+
+    /* ---------- Utilities ---------- */
+    function downloadExampleJSON(tipo, data){
+      try {
+        // `data` may be a string template when called inline; try to parse if necessary
+        const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `${tipo}_ejemplo.json`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      } catch (err) {
+        console.error(err);
+        alert('No se pudo guardar JSON (demo).');
+      }
+    }
+  </script>
+</body>
+</html>
+<script>
+  window.addEventListener('mouseover', initLandbot, { once: true });
+  window.addEventListener('touchstart', initLandbot, { once: true });
+  var myLandbot;
+  function initLandbot() {
+    if (!myLandbot) {
+      var s = document.createElement('script');
+      s.type = "module"
+      s.async = true;
+      s.addEventListener('load', function() {
+        var myLandbot = new Landbot.Livechat({
+          configUrl: 'https://storage.googleapis.com/landbot.online/v3/H-3232054-MNRNX267NEJNX4Q3/index.json',
+        });
+      });
+      s.src = 'https://cdn.landbot.io/landbot-3/landbot-3.0.0.mjs';
+      var x = document.getElementsByTagName('script')[0];
+      x.parentNode.insertBefore(s, x);
+    }
+  }
+</script>
