@@ -360,3 +360,569 @@ window.addEventListener("DOMContentLoaded", () => {
   checkPaymentPeriod()
   generateBeeLogo()
 })
+
+// Carrito de compras simulado
+class ShoppingCart {
+    constructor() {
+        this.items = this.loadCart();
+    }
+
+    loadCart() {
+        const saved = localStorage.getItem('cbtis-carrito');
+        return saved ? JSON.parse(saved) : [];
+    }
+
+    saveCart() {
+        localStorage.setItem('cbtis-carrito', JSON.stringify(this.items));
+        this.updateCartUI();
+    }
+
+    addItem(name, price, id) {
+        const existingItem = this.items.find(item => item.id === id);
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            this.items.push({
+                id: id,
+                name: name,
+                price: parseFloat(price) || 0,
+                quantity: 1
+            });
+        }
+        this.saveCart();
+    }
+
+    removeItem(id) {
+        this.items = this.items.filter(item => item.id !== id);
+        this.saveCart();
+    }
+
+    updateQuantity(id, quantity) {
+        const item = this.items.find(item => item.id === id);
+        if (item) {
+            item.quantity = Math.max(1, quantity);
+            this.saveCart();
+        }
+    }
+
+    getSubtotal() {
+        return this.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+    }
+
+    getIva() {
+        return this.getSubtotal() * 0.16;
+    }
+
+    getTotal() {
+        return this.getSubtotal() + this.getIva();
+    }
+
+    updateCartUI() {
+        const cartCount = document.getElementById('cartCount');
+        const cartItems = document.getElementById('cartItems');
+        const subtotalDisplay = document.getElementById('subtotalDisplay');
+        const ivaDisplay = document.getElementById('ivaDisplay');
+        const totalDisplay = document.getElementById('totalDisplay');
+
+        if (!cartCount) return;
+
+        const totalItems = this.items.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.textContent = totalItems;
+
+        if (this.items.length === 0) {
+            cartItems.innerHTML = '<p class="cart-empty">Tu carrito está vacío</p>';
+        } else {
+            cartItems.innerHTML = this.items.map(item => `
+                <div class="cart-item">
+                    <div class="cart-item-header">
+                        <h3 class="cart-item-name">${item.name}</h3>
+                        <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">✕</button>
+                    </div>
+                    <p class="cart-item-price">$${item.price.toFixed(2)} MXN</p>
+                    <div class="cart-item-controls">
+                        <button class="quantity-btn" onclick="updateCartQuantity('${item.id}', ${item.quantity - 1})">−</button>
+                        <input type="number" class="quantity-input" value="${item.quantity}" onchange="updateCartQuantity('${item.id}', this.value)" min="1">
+                        <button class="quantity-btn" onclick="updateCartQuantity('${item.id}', ${item.quantity + 1})">+</button>
+                        <span style="margin-left: auto; font-weight: 600; color: var(--primary-color);">$${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        const subtotal = this.getSubtotal();
+        const iva = this.getIva();
+        const total = this.getTotal();
+
+        subtotalDisplay.textContent = `$${subtotal.toFixed(2)}`;
+        ivaDisplay.textContent = `$${iva.toFixed(2)}`;
+        totalDisplay.textContent = `$${total.toFixed(2)}`;
+    }
+}
+
+// Productos disponibles
+const products = [
+    { id: 'boleta', name: 'Boleta de Calificaciones', price: 'Gratuito', description: 'Consulta y descarga tus calificaciones' },
+    { id: 'certificado', name: 'Certificado de Estudios', price: '$350.00 MXN', description: 'Certificado oficial de bachillerato' },
+    { id: 'constancia', name: 'Constancia de Estudios', price: '$150.00 MXN', description: 'Constancia oficial para trámites' },
+    { id: 'historial', name: 'Historial Académico', price: 'Gratuito', description: 'Trayectoria completa de estudios' },
+    { id: 'referencia', name: 'Referencia de Pago', price: 'Sin costo', description: 'Referencia bancaria Santander' },
+    { id: 'kardex', name: 'Kardex Escolar', price: '$200.00 MXN', description: 'Documento oficial con historial' },
+    { id: 'carta', name: 'Carta de Recomendación', price: '$100.00 MXN', description: 'Cartas para becas o empleo' },
+    { id: 'credencial', name: 'Credencial Escolar', price: '$80.00 MXN', description: 'Reposición o renovación' },
+    { id: 'pago', name: 'Pago en Línea', price: '$0.00 MXN', description: 'Realiza pagos seguros' }
+];
+
+let cart = null;
+
+// Función para agregar productos al carrito
+function addToCart(name, price, id) {
+    if (!cart) {
+        cart = new ShoppingCart();
+    }
+    cart.addItem(name, price, id);
+    alert(`${name} agregado al carrito`);
+    updateCartUI();
+}
+
+function removeFromCart(id) {
+    if (cart) {
+        cart.removeItem(id);
+    }
+}
+
+function updateCartQuantity(id, quantity) {
+    if (cart) {
+        cart.updateQuantity(id, parseInt(quantity));
+    }
+}
+
+function openCart() {
+    const modal = document.getElementById('cartModal');
+    if (modal) {
+        modal.classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeCart() {
+    const modal = document.getElementById('cartModal');
+    if (modal) {
+        modal.classList.remove('active');
+        document.body.style.overflow = 'auto';
+    }
+}
+
+function updateCartUI() {
+    if (cart) {
+        cart.updateCartUI();
+    }
+}
+
+function proceedToCheckout() {
+    if (!cart || cart.items.length === 0) {
+        alert('Tu carrito está vacío');
+        return;
+    }
+    
+    const total = cart.getTotal();
+    const itemCount = cart.items.reduce((sum, item) => sum + item.quantity, 0);
+    
+    alert(`Compra simulada:\n\n${itemCount} artículo(s)\nTotal: $${total.toFixed(2)} MXN\n\nSerás redirigido a pagos...`);
+    window.location.href = 'servicios.html#pago';
+}
+
+// Inicialización del carrito
+window.addEventListener("DOMContentLoaded", () => {
+    checkPaymentPeriod();
+    generateBeeLogo();
+    cart = new ShoppingCart();
+    updateCartUI();
+});
+
+// Agregar event listener para el botón de toggle del carrito
+const cartToggleBtn = document.getElementById('cartToggleBtn');
+if (cartToggleBtn) {
+    cartToggleBtn.addEventListener('click', openCart);
+}
+
+// Cerrar carrito al hacer clic fuera
+document.addEventListener('click', function(event) {
+    const cartModal = document.getElementById('cartModal');
+    const cartToggleBtn = document.getElementById('cartToggleBtn');
+    
+    if (cartModal && !cartModal.contains(event.target) && event.target !== cartToggleBtn) {
+        closeCart();
+    }
+});
+
+// Agregar event listener para el botón de toggle del carrito
+const cartToggleBtn = document.getElementById('cartToggleBtn');
+if (cartToggleBtn) {
+    cartToggleBtn.addEventListener('click', openCart);
+}
+
+// Cerrar carrito al hacer clic fuera
+document.addEventListener('click', function(event) {
+    const cartModal = document.getElementById('cartModal');
+    const cartToggleBtn = document.getElementById('cartToggleBtn');
+    
+    if (cartModal && !cartModal.contains(event.target) && event.target !== cartToggleBtn) {
+        closeCart();
+    }
+});
+
+function addToCart(name, price, id) {
+    console.log('[v0] addToCart called:', name, price, id);
+    
+    if (!cart) {
+        console.log('[v0] Initializing cart...');
+        cart = new ShoppingCart();
+    }
+    
+    cart.addItem(name, price, id);
+    console.log('[v0] Cart items:', cart.items);
+    
+    // Show visual notification
+    showNotification(`${name} agregado al carrito ✓`);
+}
+
+function removeFromCart(id) {
+    console.log('[v0] removeFromCart called:', id);
+    if (cart) {
+        cart.removeItem(id);
+    }
+}
+
+function updateCartQuantity(id, quantity) {
+    console.log('[v0] updateCartQuantity called:', id, quantity);
+    if (cart) {
+        cart.updateQuantity(id, parseInt(quantity));
+    }
+}
+
+function openCart() {
+    console.log('[v0] openCart called');
+    const modal = document.getElementById('cartModal');
+    if (modal) {
+        modal.style.display = 'block';
+        setTimeout(() => {
+            modal.classList.add('active');
+        }, 10);
+        document.body.style.overflow = 'hidden';
+    }
+}
+
+function closeCart() {
+    console.log('[v0] closeCart called');
+    const modal = document.getElementById('cartModal');
+    if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300);
+        document.body.style.overflow = 'auto';
+    }
+}
+
+function updateCartUI() {
+    if (cart) {
+        cart.updateCartUI();
+    }
+}
+
+function proceedToCheckout() {
+    console.log('[v0] proceedToCheckout called');
+    if (!cart || cart.items.length === 0) {
+        alert('Tu carrito está vacío');
+        return;
+    }
+    
+    const total = cart.getTotal();
+    const itemCount = cart.items.reduce((sum, item) => sum + item.quantity, 0);
+    
+    alert(`Compra simulada:\n\n${itemCount} artículo(s)\nTotal: $${total.toFixed(2)} MXN\n\n¡Gracias por tu compra!`);
+    
+    // Clear cart after purchase
+    cart.items = [];
+    cart.saveCart();
+    closeCart();
+}
+
+function showNotification(message) {
+    // Create notification element if it doesn't exist
+    let notification = document.getElementById('cartNotification');
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.id = 'cartNotification';
+        notification.className = 'cart-notification';
+        document.body.appendChild(notification);
+    }
+    
+    notification.textContent = message;
+    notification.classList.add('show');
+    
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 2000);
+}
+
+// Menu Toggle
+const menuToggle = document.getElementById("menuToggle")
+const navList = document.querySelector(".nav-list")
+if (menuToggle) {
+  menuToggle.addEventListener("click", function () {
+    navList.classList.toggle("active")
+    this.classList.toggle("active")
+  })
+}
+
+// Close nav when clicking a link
+document.querySelectorAll(".nav-list a").forEach((link) => {
+  link.addEventListener("click", () => {
+    if (navList) navList.classList.remove("active")
+    if (menuToggle) menuToggle.classList.remove("active")
+  })
+})
+
+// Alert banner visible solo en agosto (8) y febrero (2)
+function checkPaymentPeriod() {
+  const currentMonth = new Date().getMonth() + 1
+  const alertBanner = document.getElementById("alertBanner")
+  if (!alertBanner) return
+  if (currentMonth === 8 || currentMonth === 2) {
+    alertBanner.classList.add("active")
+  } else {
+    alertBanner.classList.remove("active")
+  }
+}
+
+const alertClose = document.getElementById("alertClose")
+if (alertClose) {
+  alertClose.addEventListener("click", () => {
+    document.getElementById("alertBanner").style.display = "none"
+  })
+}
+
+// Simple scroll smooth
+document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+  anchor.addEventListener("click", function (e) {
+    const href = this.getAttribute("href")
+    if (href === "#") return
+    e.preventDefault()
+    const target = document.querySelector(href)
+    if (target) target.scrollIntoView({ behavior: "smooth", block: "start" })
+  })
+})
+
+// Generar logo abeja SVG
+function generateBeeLogo() {
+  const logos = document.querySelectorAll("#logo, .login-logo")
+  const beeSVG = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100%" height="100%">
+            <circle cx="50" cy="50" r="20" fill="#FFD700"/>
+            <ellipse cx="35" cy="45" rx="8" ry="15" fill="#87CEEB" opacity="0.6"/>
+            <ellipse cx="65" cy="45" rx="8" ry="15" fill="#87CEEB" opacity="0.6"/>
+            <rect x="45" y="45" width="10" height="3" fill="#000"/>
+            <rect x="45" y="52" width="10" height="3" fill="#000"/>
+            <rect x="45" y="59" width="10" height="3" fill="#000"/>
+            <circle cx="45" cy="32" r="2" fill="#000"/>
+            <circle cx="55" cy="32" r="2" fill="#000"/>
+            <path d="M 45 38 Q 50 40 55 38" stroke="#000" fill="none" stroke-width="1.5"/>
+        </svg>
+    `
+  logos.forEach((logo) => {
+    if (logo) logo.innerHTML = beeSVG
+  })
+}
+
+// Login Form
+const loginForm = document.getElementById("loginForm")
+if (loginForm) {
+  loginForm.addEventListener("submit", (e) => {
+    e.preventDefault()
+    const curp = document.getElementById("curp").value
+    const numeroControl = document.getElementById("numeroControl").value
+    const password = document.getElementById("password").value
+
+    // Validación simple
+    if (curp.length === 18 && numeroControl.length === 8 && password.length >= 6) {
+      // Guardar sesión
+      sessionStorage.setItem("userLoggedIn", "true")
+      sessionStorage.setItem("userCurp", curp)
+      sessionStorage.setItem("userControl", numeroControl)
+
+      alert("¡Inicio de sesión exitoso! Bienvenido al portal.")
+      window.location.href = "servicios.html"
+    } else {
+      alert(
+        "Por favor verifica tus datos. Asegúrate de que el CURP tenga 18 caracteres, el número de control 8 dígitos y la contraseña al menos 6 caracteres.",
+      )
+    }
+  })
+}
+
+// Funciones auxiliares
+function generarNombre(curp) {
+  const nombres = ["Juan Carlos", "María Fernanda", "Luis Alberto", "Ana Patricia", "José Miguel", "Laura Sofía"]
+  const apellidos = ["García López", "Martínez Rodríguez", "Hernández Pérez", "González Sánchez", "Ramírez Torres"]
+  return (
+    nombres[Math.floor(Math.random() * nombres.length)] + " " + apellidos[Math.floor(Math.random() * apellidos.length)]
+  )
+}
+
+function downloadPDF(tipo) {
+  alert("Generando PDF de " + tipo + "... Esta función estará disponible próximamente.")
+}
+
+// Funciones para descuentos
+function aplicarPromocion(promo) {
+  alert('Promoción "' + promo + '" aplicada correctamente. Serás redirigido al formulario de pago.')
+  window.location.href = "servicios.html#pago"
+}
+
+function copiarCupon(codigo) {
+  navigator.clipboard
+    .writeText(codigo)
+    .then(() => {
+      alert('Cupón "' + codigo + '" copiado al portapapeles. Úsalo al realizar tu pago.')
+    })
+    .catch(() => {
+      alert("Cupón: " + codigo + " - Cópialo manualmente")
+    })
+}
+
+class ShoppingCart {
+    constructor() {
+        this.items = this.loadCart();
+    }
+
+    loadCart() {
+        const saved = localStorage.getItem('cbtis-carrito');
+        return saved ? JSON.parse(saved) : [];
+    }
+
+    saveCart() {
+        localStorage.setItem('cbtis-carrito', JSON.stringify(this.items));
+        this.updateCartUI();
+    }
+
+    addItem(name, price, id) {
+        const existingItem = this.items.find(item => item.id === id);
+        if (existingItem) {
+            existingItem.quantity += 1;
+        } else {
+            this.items.push({
+                id: id,
+                name: name,
+                price: parseFloat(price) || 0,
+                quantity: 1
+            });
+        }
+        this.saveCart();
+    }
+
+    removeItem(id) {
+        this.items = this.items.filter(item => item.id !== id);
+        this.saveCart();
+    }
+
+    updateQuantity(id, quantity) {
+        const item = this.items.find(item => item.id === id);
+        if (item) {
+            item.quantity = Math.max(1, quantity);
+            this.saveCart();
+        }
+    }
+
+    getSubtotal() {
+        return this.items.reduce((total, item) => total + (item.price * item.quantity), 0);
+    }
+
+    getIva() {
+        return this.getSubtotal() * 0.16;
+    }
+
+    getTotal() {
+        return this.getSubtotal() + this.getIva();
+    }
+
+    updateCartUI() {
+        const cartCount = document.getElementById('cartCount');
+        const cartItems = document.getElementById('cartItems');
+        const subtotalDisplay = document.getElementById('subtotalDisplay');
+        const ivaDisplay = document.getElementById('ivaDisplay');
+        const totalDisplay = document.getElementById('totalDisplay');
+
+        if (!cartCount) return;
+
+        const totalItems = this.items.reduce((sum, item) => sum + item.quantity, 0);
+        cartCount.textContent = totalItems;
+
+        if (this.items.length === 0) {
+            cartItems.innerHTML = '<p class="cart-empty">Tu carrito está vacío</p>';
+        } else {
+            cartItems.innerHTML = this.items.map(item => `
+                <div class="cart-item">
+                    <div class="cart-item-header">
+                        <h3 class="cart-item-name">${item.name}</h3>
+                        <button class="cart-item-remove" onclick="removeFromCart('${item.id}')">✕</button>
+                    </div>
+                    <p class="cart-item-price">$${item.price.toFixed(2)} MXN</p>
+                    <div class="cart-item-controls">
+                        <button class="quantity-btn" onclick="updateCartQuantity('${item.id}', ${item.quantity - 1})">−</button>
+                        <input type="number" class="quantity-input" value="${item.quantity}" onchange="updateCartQuantity('${item.id}', this.value)" min="1">
+                        <button class="quantity-btn" onclick="updateCartQuantity('${item.id}', ${item.quantity + 1})">+</button>
+                        <span style="margin-left: auto; font-weight: 600; color: var(--primary-color);">$${(item.price * item.quantity).toFixed(2)}</span>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        const subtotal = this.getSubtotal();
+        const iva = this.getIva();
+        const total = this.getTotal();
+
+        subtotalDisplay.textContent = `$${subtotal.toFixed(2)}`;
+        ivaDisplay.textContent = `$${iva.toFixed(2)}`;
+        totalDisplay.textContent = `$${total.toFixed(2)}`;
+    }
+}
+
+let cart = null;
+
+window.addEventListener("DOMContentLoaded", () => {
+    console.log('[v0] DOM Content Loaded - Initializing...');
+    
+    checkPaymentPeriod();
+    generateBeeLogo();
+    
+    // Initialize shopping cart
+    cart = new ShoppingCart();
+    updateCartUI();
+    console.log('[v0] Cart initialized with items:', cart.items);
+    
+    // Add event listener for cart toggle button
+    const cartToggleBtn = document.getElementById('cartToggleBtn');
+    if (cartToggleBtn) {
+        cartToggleBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            openCart();
+        });
+        console.log('[v0] Cart toggle button listener added');
+    }
+});
+
+document.addEventListener('click', function(event) {
+    const cartModal = document.getElementById('cartModal');
+    const cartModalContent = cartModal?.querySelector('.cart-modal-content');
+    const cartToggleBtn = document.getElementById('cartToggleBtn');
+    
+    // Close only if clicking outside the modal content and not on the toggle button
+    if (cartModal && cartModal.classList.contains('active')) {
+        if (!cartModalContent?.contains(event.target) && 
+            !cartToggleBtn?.contains(event.target)) {
+            closeCart();
+        }
+    }
+});
